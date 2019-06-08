@@ -39,6 +39,12 @@ public class EmployeeController {
 		Optional<Employee> emp = employeeRepository.findById(id);
 		return emp;
 	}
+	
+	@GetMapping("/employee/firstName/{firstName}")
+	public List<Employee> searchByFirstName(@PathVariable String firstName) {
+		List<Employee> employeesList = employeeRepository.findByFirstNameRegex(firstName);
+		return employeesList;
+	}
 
 	@PutMapping("/employee/{id}")
 	public Optional<Employee> updateEmployee(@RequestBody Employee newEmployee, @PathVariable String id) {
@@ -59,11 +65,16 @@ public class EmployeeController {
 		employeeRepository.deleteById(id);
 		return "{ \"operacionExitosa\" : " + (result ? "true" : "false") + " }";
 	}
+	@DeleteMapping(value = "/employee/delete", produces = "application/json; charset=utf-8")
+	public String deleteAllEmployees() {
+		employeeRepository.deleteAll();
+		return "{ \"operacionExitosa\" : true }";
+	}
 
 	@PostMapping("/employee")
 	public Employee addEmployee(@RequestBody Employee newEmployee) {
 		String id = String.valueOf(new Random().nextInt());
-		Employee emp = new Employee(id, newEmployee.getFirstName(), newEmployee.getLastName(), newEmployee.getEmail());
+		Employee emp = new Employee(id, newEmployee.getFirstName(), newEmployee.getLastName(), newEmployee.getEmail(), newEmployee.getActive() == null ? false : newEmployee.getActive());
 		employeeRepository.insert(emp);
 		return emp;
 	}
