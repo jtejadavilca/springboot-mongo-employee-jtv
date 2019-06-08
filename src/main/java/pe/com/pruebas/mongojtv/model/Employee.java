@@ -16,6 +16,7 @@ public class Employee {
 	private @NonNull String firstName;
 	private @NonNull String lastName;
 	private @NonNull String email;
+	private @NonNull Boolean active;
 	public Employee() {
 		
 	}
